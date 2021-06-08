@@ -149,5 +149,8 @@ def optflow_main(video_filename, width, height, pyr_scale = None, levels = 0.5, 
         #print(flow.shape)
         flowMean_x, flowMean_y = flow_mean(flow)
         slip = isSlip(flowMean_x, flowMean_y, 0, 0)
+        
+        font = cv.FONT_HERSHEY_SIMPLEX
+        cv.putText(gray, "flowMean_x", (10,450), font, 3, (0, 255, 0), 2, cv.LINE_AA)
 
     #return allFlow # 3D optical flow matrix (every row is the optical flow of one frame, which contains x and y values)
