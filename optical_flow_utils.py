@@ -97,7 +97,19 @@ def writeToFile_flow(matrix_name, out_filename):
     scipy.io.savemat(matfile, mdict={'out': matrix_name}, oned_as='row')
     matdata = scipy.io.loadmat(matfile)
     assert np.all(matrix_name == matdata['out'])
+    
+    
+def flow_mean(flow):
+    mean_x = np.mean(flow[:,:,0])
+    mean_y = np.mean(flow[:,:,1])
+    return mean_x, mean_y
 
+
+def isSlip(mean_x, mean_y, thresh_x, thresh_y):
+    if(mean_x > thresh_x or mean_x < -thresh_x):
+        print("slip in x") 
+    if(mean_y > thresh_y or mean_y < -thresh_y):
+        print("slip in y")
 
 # Farneback optical flow calculation
 # This function handles the video, calculates the optical flow and the normalized values of dx and dy. You can add here standardization.
@@ -133,5 +145,9 @@ def optflow_main(video_filename, width, height, pyr_scale = None, levels = 0.5, 
 
         if not optflow_visualized:
             break
+            
+        #print(flow.shape)
+        flowMean_x, flowMean_y = flow_mean(flow)
+        slip = isSlip(flowMean_x, flowMean_y, 0, 0)
 
     #return allFlow # 3D optical flow matrix (every row is the optical flow of one frame, which contains x and y values)
